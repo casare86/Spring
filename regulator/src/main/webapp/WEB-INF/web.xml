@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>regulator</display-name>
+  <welcome-file-list>
+    <welcome-file>welcome.html</welcome-file>
+  <!-- List of default pages like index that will be loaded when someone access the root of the project 
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file> 
+    -->
+  </welcome-file-list>
+  
+  <servlet>
+  	<servlet-name>WelcomeServlet</servlet-name>
+  	<servlet-class>br.com.regulator.servlets.WelcomeServlet</servlet-class>
+  </servlet>
+  
+  <!-- Can add url paths to servlets  -->
+  <!-- both names need to be the same to create an relation between them -->
+  <servlet-mapping>
+  	<servlet-name>WelcomeServlet</servlet-name> 
+  	<url-pattern>/welcom</url-pattern>
+  </servlet-mapping>
+  
+  
+  <!--  Filters layer -->
+  <!--  the order wich you put your filters in xml is the order the server process the filters -->
+  <filter>
+  	<filter-name>MonitorFilter</filter-name>
+  	<filter-class>br.com.regulator.filters.MonitorFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>MonitorFilter</filter-name>
+  	<url-pattern>/company</url-pattern>
+  </filter-mapping>
+  
+  <filter>
+  	<filter-name>AuthorizationFilter</filter-name>
+  	<filter-class>br.com.regulator.filters.AuthorizationFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>AuthorizationFilter</filter-name>
+  	<url-pattern>/company</url-pattern>
+  </filter-mapping>
+  
+  
+  <!--  Security layer -->
+   <login-config>
+      <auth-method>BASIC</auth-method>
+    </login-config>
+
+    <security-role>
+        <role-name>ADMIN</role-name>
+    </security-role>
+    <security-role>
+        <role-name>USER</role-name>
+    </security-role>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>URL access control</web-resource-name>
+            <url-pattern>/regulator</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>HTML access only</web-resource-name>
+            <url-pattern>*.html</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>USER</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    <!--Config the lifetime of HttpSession object, for this project it will be 1 hour - 60min  -->
+    <session-config>
+    	<session-timeout>60</session-timeout>
+	</session-config>
+</web-app>

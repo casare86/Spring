@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+             
+             <persistence-unit name="store" transaction-type="RESOURCE_LOCAL"> <!-- JTA para servidor de aplicação (ejb2 apache etc) -->
+	            <!-- If using only JPA you need to specify the classes as <class></class>
+	            	since this project uses Hibernate we dont need this specification 
+	            	<class>br.com.casare86.store.model.ProductModel</class>
+	             -->
+	            
+	             <!-- application config goes here (each database has its own persistence-unit) -->
+	             <properties>
+		         	<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+		            <property name="javax.persistence.jdbc.url" value=" jdbc:mysql://localhost:3306/cursos?serverTimezone=UTC" />
+	           		<property name="javax.persistence.jdbc.user" value="casare" />
+		            <property name="javax.persistence.jdbc.password" value="casare" />
+		            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+		            <property name="hibernate.show_sql" value="true"/>
+            		<property name="hibernate.format_sql" value="true"/>
+            		<!-- controls the changes in database, if necessary (create, update, create-drop) -->
+            		<property name="hibernate.hbm2ddl.auto" value="update"/>
+	             </properties>
+             </persistence-unit>
+             
+</persistence>

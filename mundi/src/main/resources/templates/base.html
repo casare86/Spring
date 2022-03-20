@@ -1,0 +1,20 @@
+<head th:fragment="head">
+	<meta charset="UTF-8">
+	<title>Spring MVC Classes - Product list</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+	
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
+</head>
+
+<div th:fragment="header" class="bg-primary text-white mb-3 p-3 d-flex justify-content-between" style="font-family: 'Handlee', cursive;">
+	<span>Mundi</span>
+	<span> Login </a></span>
+	<!--  Logout processes need to be done as a POST so a form is needed for this one -->
+	<a class="text-light" onclick="document.querySelector('#form-logout').submit()" sec:authorize="isAuthenticated()" href="#"> Logout </a></span>
+</div>
+
+<div th:fragment="jumbotron(value)" class="jumbotron mb-0 mt-2">
+			<h1 class="display-4" th:text="${value}"></h1>
+		</div>

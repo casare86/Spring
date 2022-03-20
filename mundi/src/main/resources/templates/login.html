@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="~{base::head}"></head>
+<body>
+	<div th:replace="~{base::header}">
+	</div>
+	<div class="container col-6 justify-content-md-center">
+		<div th:replace="~{base :: jumbotron('Login')}">
+		</div>
+		<div class="card mb-3" > 
+			<form action="@{login}" class="card-body col-8 align-self-center" method="POST">
+			<div class="form-group">
+				<label for="username">Username</label>
+				<input class="form-control" type="text" name="username" placeholder="username" />
+			</div>
+			<div class="form-group">
+				<label for="password">Password</label>
+				<input type="password" class="form-control" name="password" placeholder="username"/>
+			</div>
+			<button type="submit" class="btn-lg btn-primary"> Login </button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

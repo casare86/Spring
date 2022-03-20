@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="~{base::head}"></head>
+
+<body>
+	<div th:replace="~{base::header}"></div>
+	<div class="container">
+		<div th:replace="~{base :: jumbotron('New Order')}"></div>
+		
+		<div class="card mt-3 mb-3">
+			<form th:object="${orderDTO}" class="card-body " action="/order/new" method="POST">
+				<div class="form-group">
+					<label for="name">Product</label>
+					<input class="form-control" th:field=*{name} placeholder="Product name"/>
+					<small>Input product name.</small>
+					<div class="alert alert-danger alert-dismissible fade show" role="alert" th:errors="*{name}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="urlProduct">URL</label>
+					<input class="form-control" th:field="*{urlProduct}" placeholder="Product url"/>
+					<small>Copy and paste the URL from target product.</small>
+					<div class="alert alert-danger alert-dismissible fade show" role="alert" th:errors="*{urlProduct}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="imgProductUrl">Image</label>
+					<input class="form-control" th:field="*{imgProductUrl}" placeholder="Product Image url"/>
+					<small>Copy and paste the Image URL from target product.</small>
+					<div class="alert alert-danger alert-dismissible fade show" role="alert" th:errors="*{imgProductUrl}">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="description">Description</label>
+					<textarea class="form-control" colspan="10" rowspan="5" th:field="*{description}" placeholder="product description to help the buyer"/>
+					<small>Paste the description of the product from target site or input your preferences</small>
+				</div>
+				<button class="btn btn-primary" type="submit">Submit</button>
+			</form>
+		</div><!-- card -->
+	</div><!-- container -->
+</body>
+</html>
