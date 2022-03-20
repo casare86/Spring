@@ -1,0 +1,206 @@
+Anotações gerais sobre o projeto
+PROTOCOLOS HTTP:
+200 - sucesso genérico - método void
+201 algo foi criado no servidor (cadastro bem sucedido por ex)
+201 precisa de 2 itens: 1 (location -Header) Cabeçalho com a url do item criado e 2 - (Body) representação do recurso criado
+401 - Unauthorized -> não pode acessar o conteúdo (ex: Spring Secrity ativo e o usuário não tem autoridade para acessar o conteúdo)
+403 - Forbidden
+404 Not Found
+500 erro de aplicação
+
+NOTATIONS Spring e API:
+@EnableSpringDataWebSupport notation para habilitar algumas funções web do Spring, como controle de paginação (Adicionada na classe Main)
+@EnableWebSecurity -> habilita o modulo Security (verificação de segurança, se tem permissão(authorized) e autoridade (authority))
+@Configuration //Lê as configurações da classe ao inicializar o o projeto
+
+@RequestMapping(value = "/topicos", method = RequestMethod.GET) indica o endereço url de mapeamento e o verbo esperado
+@RestController -> Controller mas do tipo rest
+@Controller -> Controller que fará a orientação dos métodos HTTP e request para views e models(DAO/Service)
+
+@ResponseEntity<T> - classe de retorno genérica do Spring (usada principalmente quando não irá retornar um model ou view
+@ResponseBody necessário  quando o retorno não é um model como JSP ou páginas web, com essa notation ele retorna apenas a respose diretamente.
+@RequestBody também indica que a informação está no body da request e não na URL
+@RequestParam -> indica que o parametro deve vir do request, possui o atributo required que pode ser false para se tornar opcional
+@Transactional //sem essa notação não há como o spring realizar as devidas alterações
+
+@EnableCaching - precisa das dependências de Cach e provider. Declarar na classe principal (main, application)
+@Cacheable(value = "idCache") - atribui um ID ao cache para que possa ser manipulado depois
+@CacheEvict (value = "idCache", allEntries = true) //remove o cache para que seja atualizado na próxima request 
+		
+Verbos APIS
+@PatchMapping atualiza apenas pequenas partes, é como um "remendo"
+@PutMapping("/{id}") //put reescreve todo o item, atualiza por inteiro
+@GetMapping("/url") //passagem parametros via URL
+@PostMapping("/{urlNaoEstatica}") //método Post - informações no body
+@RequestMapping(value = "/topicos") //padrão de URL
+@DeleteMapping("/{id}")
+
+
+
+
+Exemplo de json para teste de insert
+
+== Postman ==
+Config Header: Application/json
+Config Body: raw (JSON puro) 
+
+GET: http://localhost:8080/topicos
+{
+    "id": 1,
+    "titulo": "Dúvida",
+    "mensagem": "Erro ao criar projeto",
+    "dataCriacao": "2021-10-05T18:00:00"
+},
+{
+    "id": 2,
+    "titulo": "Dúvida 2",
+    "mensagem": "Projeto não compila",
+    "dataCriacao": "+20121-10-05T19:00:00"
+},
+{
+    "id": 3,
+    "titulo": "Dúvida 3",
+    "mensagem": "Tag HTML",
+    "dataCriacao": "2021-10-05T20:00:00"
+}
+
+Get: http://localhost:8080/topicos/3
+Resposta detalhada
+{
+    "id": 3,
+    "titulo": "Dúvida 3",
+    "mensagem": "Tag HTML",
+    "dataCriacao": "2021-10-05T20:00:00",
+    "nomeAutor": "Aluno",
+    "status": "NAO_RESPONDIDO",
+    "respostas": []
+}
+
+POST: http://localhost:8080/topicos
+{
+	"titulo": "Dúvida Postman",
+	"mensagem": "Texto da requisição",
+	"nomeCurso": "Spring"
+}
+Resposta:
+{
+    "id": 4,
+    "titulo": "Dúvida Postman",
+    "mensagem": "Texto da requisição",
+    "dataCriacao": "2021-10-10T22:57:40.928999947"
+}
+
+
+Put (Update): http://localhost:8080/topicos/3
+{
+	"titulo": "Dúvida 3 - Update via PUT",
+	"mensagem": "Troca de: Tag HTML por Tags HTML5"
+}
+//Resposta gerada:
+{
+    "id": 3,
+    "titulo": "Dúvida 3 - Update via PUT",
+    "mensagem": "Troca de: Tag HTML por Tags HTML5",
+    "dataCriacao": "2021-10-05T20:00:00"
+}
+
+Delete: http://localhost:8080/topicos/3
+{} resposta vem vazia, mas ao consultar percebe-se que foi removido
+
+//USANDO PAGINAÇÃO
+http://localhost:8080/topicos/paginadoManual?pagina=1&quantidade=2 (com 5 tópicos)
+//Se buscar uma página maior do que a quantidade de páginas trará conteúdo vazio
+{
+    "content": [
+        {
+            "id": 3,
+            "titulo": "Dúvida 3",
+            "mensagem": "Tag HTML",
+            "dataCriacao": "2021-10-05T20:00:00"
+        },
+        {
+            "id": 4,
+            "titulo": "Teste Paginação",
+            "mensagem": "Adicionando registro para testes de paginação.",
+            "dataCriacao": "2021-10-12T00:11:09.806319"
+        }
+    ],
+    "pageable": {
+        "sort": {
+            "sorted": false,
+            "unsorted": true,
+            "empty": true
+        },
+        "pageNumber": 1,
+        "pageSize": 2,
+        "offset": 2,
+        "paged": true,
+        "unpaged": false
+    },
+    "totalPages": 3,
+    "totalElements": 5,
+    "last": false, //true se for a ultima
+    "first": false, //true se for a pagina 0
+    "sort": {
+        "sorted": false,
+        "unsorted": true,
+        "empty": true
+    },
+    "number": 1,
+    "numberOfElements": 2,
+    "size": 2,
+    "empty": false
+}
+//Paginação padrão Spring
+ http://localhost:8080/topicos/paginado?page=0&size=10&sort=id,asc$sort=dataCriacao,desc
+ 
+ 
+Autenticação (POST) (/auth)
+http://localhost:8080/auth 
+{
+ 	"email":"aluno@email.com",
+  	"senha": "123456"
+}
+
+//Com o processo via TOKEN
+Delete: http://localhost:8080/topicos/2  
+Header: 
+Content-Type: application/json
+Authorization: Bearer hashDoToken
+  
+//Actuator - verificar o status da aplicação
+GET: http://localhost:8080/actuator
+
+  
+//Actuator - verificar o status da aplicação
+GET: http://localhost:8080/actuator/heath //devolve status UP (rodando) DOWN (fora do ar)
+retorno: (com a opção management.endpoint.health.show-details=always)
+{
+    "status": "UP",
+    "components": {
+        "db": {
+            "status": "UP",
+            "details": {
+                "database": "H2",
+                "validationQuery": "isValid()"
+            }
+        },
+        "diskSpace": {
+            "status": "UP",
+            "details": {
+                "total": 250438021120,
+                "free": 53509648384,
+                "threshold": 10485760,
+                "exists": true
+            }
+        },
+        "ping": {
+            "status": "UP"
+        }
+    }
+}
+
+//Actuator - Informações (por default vem vazio) - configurável via Application.properties
+GET: http://localhost:8080/actuator/info
+
+ 

@@ -1,0 +1,11 @@
+br.com.alura.forum
+br.com.casare86.forum
+br.com.casare86.forum.config.security
+br.com.casare86.forum.config.swagger
+br.com.casare86.forum.config.validacao
+br.com.casare86.forum.controller
+br.com.casare86.forum.controller.dto
+br.com.casare86.forum.controller.form
+br.com.casare86.forum.modelo
+br.com.casare86.forum.repository
+br.com.casare86.monitoring
